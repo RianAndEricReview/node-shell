@@ -1,16 +1,16 @@
 const fs = require('fs')
 
 module.exports = {
-  pwd: function(){
+  pwd: function(arg){
     process.stdout.write(process.cwd())
     process.stdout.write('\nprompt > ');
   },
-  date: function(){
+  date: function(arg){
     let today = new Date().toUTCString()
     process.stdout.write(today)
     process.stdout.write('\nprompt > ');
   },
-  ls: function(){
+  ls: function(arg){
     fs.readdir('.', (err, files) => {
       if (err) throw err
       files.forEach(file => {
@@ -28,5 +28,36 @@ module.exports = {
       }
     })
     process.stdout.write('\nprompt > ')
-  }
+  },
+  cat: function(filename){
+    fs.readFile('./' + filename, (err, data) => {
+      if(err) throw err
+      process.stdout.write(data)
+      process.stdout.write('\nprompt > ')
+    })
+  },
+  head: function(filename){
+    fs.readFile('./' + filename, (err, data) => {
+      if(err) throw err
+      let firstLines = data.toString().split('\n').slice(0, 5).join('\n')
+      process.stdout.write(firstLines)
+      process.stdout.write('\nprompt > ')
+    })
+  },
+  tail: function(filename){
+    fs.readFile('./' + filename, (err, data) => {
+      if(err) throw err
+      let firstLines = data.toString().split('\n').slice(-5).join('\n')
+      process.stdout.write(firstLines)
+      process.stdout.write('\nprompt > ')
+    })
+  },
+  sort: function(filename){
+    fs.readFile('./' + filename, (err, data) => {
+      if(err) throw err
+      let lines = data.toString().split('\n').sort().join('\n')
+      process.stdout.write(lines)
+      process.stdout.write('\nprompt > ')
+    })
+  },
 }

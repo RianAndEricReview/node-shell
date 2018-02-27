@@ -60,4 +60,24 @@ module.exports = {
       process.stdout.write('\nprompt > ')
     })
   },
+  wc: function(filename){
+    fs.readFile('./' + filename, (err, data) => {
+      if(err) throw err
+      let lines = data.toString().split('\n').length
+      process.stdout.write(lines.toString())
+      process.stdout.write('\nprompt > ')
+    })
+  },
+  uniq: function(filename){
+    fs.readFile('./' + filename, (err, data) => {
+      if(err) throw err
+      let lines = data.toString().split('\n')
+      lines = lines.filter((line, index)=>{
+        console.log('line', line, 'prev', lines[index-1])
+        return !(line === lines[index-1])
+      }).join('\n')
+      process.stdout.write(lines)
+      process.stdout.write('\nprompt > ')
+    })
+  },
 }

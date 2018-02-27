@@ -2,90 +2,82 @@ const fs = require('fs')
 const request = require('request')
 
 module.exports = {
-  pwd: function(arg){
-    process.stdout.write(process.cwd())
-    process.stdout.write('\nprompt > ');
+  pwd: function(arg, func){
+    func(process.cwd())
   },
-  date: function(arg){
+  date: function(arg, func){
     let today = new Date().toUTCString()
-    process.stdout.write(today)
-    process.stdout.write('\nprompt > ');
+    func(today)
   },
-  ls: function(arg){
+  ls: function(arg, func){
     fs.readdir('.', (err, files) => {
       if (err) throw err
+      let fileStr = '';
       files.forEach(file => {
-        process.stdout.write(file.toString() + '\n')
+        fileStr += file + '\n';
       })
-      process.stdout.write('\nprompt > ');
+      func(fileStr);
     })
   },
-  echo: function(args){
+  echo: function(args, func){
+    let strToPrint = '';
     args.split(' ').forEach(arg => {
       if(arg[0] === '$'){
-        process.stdout.write(process.env[arg.slice(1).toUpperCase()] + ' ')
+        strToPrint += (process.env[arg.slice(1).toUpperCase()] + ' ')
       } else {
-        process.stdout.write(arg + ' ')
+        strToPrint += (arg + ' ')
       }
     })
-    process.stdout.write('\nprompt > ')
+    func(strToPrint);
   },
-  cat: function(filename){
+  cat: function(filename, func){
     fs.readFile('./' + filename, (err, data) => {
       if(err) throw err
-      process.stdout.write(data)
-      process.stdout.write('\nprompt > ')
+      func(data)
     })
   },
-  head: function(filename){
+  head: function(filename, func){
     fs.readFile('./' + filename, (err, data) => {
       if(err) throw err
-      let firstLines = data.toString().split('\n').slice(0, 5).join('\n')
-      process.stdout.write(firstLines)
-      process.stdout.write('\nprompt > ')
+      let firstLines = data.toString().split('\n').slice(0, 5).join('\n') + '\n'
+      func(firstLines)
     })
   },
-  tail: function(filename){
+  tail: function(filename, func){
     fs.readFile('./' + filename, (err, data) => {
       if(err) throw err
       let firstLines = data.toString().split('\n').slice(-5).join('\n')
-      process.stdout.write(firstLines)
-      process.stdout.write('\nprompt > ')
+      func(firstLines)
     })
   },
-  sort: function(filename){
+  sort: function(filename, func){
     fs.readFile('./' + filename, (err, data) => {
       if(err) throw err
       let lines = data.toString().split('\n').sort().join('\n')
-      process.stdout.write(lines)
-      process.stdout.write('\nprompt > ')
+      func(lines)
     })
   },
-  wc: function(filename){
+  wc: function(filename, func){
     fs.readFile('./' + filename, (err, data) => {
       if(err) throw err
       let lines = data.toString().split('\n').length
-      process.stdout.write(lines.toString())
-      process.stdout.write('\nprompt > ')
+      func(lines.toString())
     })
   },
-  uniq: function(filename){
+  uniq: function(filename, func){
     fs.readFile('./' + filename, (err, data) => {
       if(err) throw err
       let lines = data.toString().split('\n')
       lines = lines.filter((line, index)=>{
-        console.log('line', line, 'prev', lines[index-1])
         return !(line === lines[index-1])
       }).join('\n')
-      process.stdout.write(lines)
-      process.stdout.write('\nprompt > ')
+      func(lines)
     })
   },
-  curl: (url) => {
+  curl: (url, func) => {
     request(url, (err, res, body) => {
       if(err) throw err
-      process.stdout.write(body.toString())
+      func(body.toString())
     });
-    process.stdout.write('\nprompt > ');
   }
 }

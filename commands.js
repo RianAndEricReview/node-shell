@@ -1,4 +1,5 @@
 const fs = require('fs')
+const request = require('request')
 
 module.exports = {
   pwd: function(arg){
@@ -80,4 +81,11 @@ module.exports = {
       process.stdout.write('\nprompt > ')
     })
   },
+  curl: (url) => {
+    request(url, (err, res, body) => {
+      if(err) throw err
+      process.stdout.write(body.toString())
+    });
+    process.stdout.write('\nprompt > ');
+  }
 }

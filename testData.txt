@@ -1,6 +1,8 @@
 a
 r
 b
+b
 e
 e
 c
+x

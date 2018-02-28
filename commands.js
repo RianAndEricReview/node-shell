@@ -118,4 +118,8 @@ module.exports = {
       func(body.toString())
     });
   },
+  grep: (input, arg, func) => {
+    let output = input.replace(arg, chalk.blue(arg))
+    func(output)
+  }
 }

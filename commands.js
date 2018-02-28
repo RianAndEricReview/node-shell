@@ -119,7 +119,7 @@ module.exports = {
     });
   },
   grep: (input, arg, func) => {
-    let output = input.replace(arg, chalk.blue(arg))
+    let output = input.replace(new RegExp(arg, "g"), chalk.blue(arg))
     func(output)
   }
 }

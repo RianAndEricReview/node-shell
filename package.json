@@ -18,6 +18,7 @@
   "homepage": "https://github.com/RianAndEricReview/node-shell#readme",
   "dependencies": {
     "chalk": "^2.3.1",
+    "hoek": "^5.0.3",
     "request": "^2.83.0"
   }
 }
